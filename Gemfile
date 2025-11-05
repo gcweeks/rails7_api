@@ -1,47 +1,59 @@
 source 'https://rubygems.org'
 
+ruby '>= 3.1.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.1.4'
+gem 'rails', '~> 7.2.2'
 # Use postgresql as the database for Active Record
-gem 'pg', '0.21.0'
+gem 'pg', '~> 1.5'
 # Use Puma as the app server
-gem 'puma', '~> 5.6'
+gem 'puma', '>= 6.4'
 # Use Passenger as the app server
-# gem 'passenger', '~> 5.0'
-# Use Redis adapter to run Action Cable in production
-gem 'redis-rails'
+# gem 'passenger', '~> 6.0'
+# Use Redis for caching and rate limiting
+gem 'redis', '>= 4.0', '< 6.0'
 # Use ActiveModel has_secure_password
-gem 'bcrypt', '~> 3.1.11'
+gem 'bcrypt', '~> 3.1.20'
+
+# Boot time performance
+gem 'bootsnap', require: false
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-# Twilio
-gem 'twilio-ruby', '~> 5.5.1'
-# AWS SES
-gem 'aws-ses', '~> 0.6.0', :require => 'aws/ses'
-# Rack Attack
-gem 'rack-attack'
+# Twilio SMS integration
+gem 'twilio-ruby', '~> 7.3'
+# AWS SES for email
+gem 'aws-ses', '~> 0.6.0', require: 'aws/ses'
+# Rack Attack for rate limiting
+gem 'rack-attack', '~> 6.7'
 # Slack Notifications
-gem 'slack-notifier'
+gem 'slack-notifier', '~> 2.4'
 # Exception Notifications
-gem 'exception_notification'
-# attr_encrypted
-gem 'attr_encrypted', '~> 3.0.3'
-# mock/stub
-gem 'webmock'
+gem 'exception_notification', '~> 4.5'
+# attr_encrypted for sensitive data
+gem 'attr_encrypted', '~> 4.0'
 
 group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platform: :mri
+  # HTTP request mocking
+  gem 'webmock', '~> 3.24'
+  # Debugging
+  gem 'debug', platforms: [:mri, :mingw, :x64_mingw]
 end
 
 group :development do
-  gem 'listen', '~> 3.1.5'
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  # File system event monitoring
+  gem 'listen', '~> 3.9'
+  # Spring speeds up development by keeping your application running in the background
+  # Note: Spring is optional in Rails 7+, consider removing if not needed
   gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.0.1'
+  gem 'spring-watcher-listen', '~> 2.1'
+end
+
+group :test do
+  # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
+  # gem 'capybara'
+  # gem 'selenium-webdriver'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

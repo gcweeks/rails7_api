@@ -18,11 +18,15 @@ Bundler.require(*Rails.groups)
 
 BCrypt::Engine.cost = 11
 
-module Rails5Api
+module Rails7Api
   class Application < Rails::Application
+    # Initialize configuration defaults for Rails 7.2
+    config.load_defaults 7.2
+
     # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration should go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded.
+    # Application configuration can go into files in config/initializers
+    # -- all .rb files in that directory are automatically loaded after loading
+    # the framework and any gems in your application.
 
     # Only loads a smaller set of middleware suitable for API only apps.
     # Middleware like session, flash, cookies can be added back manually.
@@ -33,5 +37,12 @@ module Rails5Api
     # auto-convert to this zone. Run "rake -D time" for a list of tasks for
     # finding time zone names. Default is UTC.
     config.time_zone = 'Pacific Time (US & Canada)'
+
+    # Rails 7.2+ defaults
+    # Don't generate system test files
+    config.generators.system_tests = nil
+
+    # Use zeitwerk autoloader (Rails 6+ default)
+    config.autoloader = :zeitwerk
   end
 end

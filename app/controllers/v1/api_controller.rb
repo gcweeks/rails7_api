@@ -12,7 +12,8 @@ class V1::ApiController < ApplicationController
     :update_password,
     :check_email,
     :version_ios,
-    :version_android
+    :version_android,
+    :health
   ]
 
   ##############################################################################
@@ -147,6 +148,38 @@ class V1::ApiController < ApplicationController
 
   def version_android
     render json: { 'version' => '0.0.1' }, status: :ok
+  end
+
+  def health
+    # Health check endpoint for load balancers and monitoring
+    # Check database connection
+    ActiveRecord::Base.connection.execute('SELECT 1')
+
+    # Check Redis connection (if configured)
+    redis_status = 'ok'
+    begin
+      if defined?(Redis) && ENV['REDIS_HOST'].present?
+        redis = Redis.new(host: ENV['REDIS_HOST'], port: 6379)
+        redis.ping
+      end
+    rescue => e
+      redis_status = "error: #{e.message}"
+    end
+
+    render json: {
+      status: 'ok',
+      rails_version: Rails.version,
+      ruby_version: RUBY_VERSION,
+      database: 'connected',
+      redis: redis_status,
+      timestamp: Time.current.iso8601
+    }, status: :ok
+  rescue => e
+    render json: {
+      status: 'error',
+      message: e.message,
+      timestamp: Time.current.iso8601
+    }, status: :service_unavailable
   end
 
   ##############################################################################
