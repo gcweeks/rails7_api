@@ -1,17 +1,19 @@
 class Rack::Attack
+  # Configure Redis connection for Rack::Attack
   if ENV['REDIS_HOST'].present?
-    $redis = Redis.new(host: ENV['REDIS_HOST'], port: 6379)
+    redis_conn = Redis.new(host: ENV['REDIS_HOST'], port: 6379)
   elsif !Rails.env.production?
-    $redis = Redis.new(host: 'localhost', port: 6379)
+    redis_conn = Redis.new(host: 'localhost', port: 6379)
   else
-    SlackHelper.log('Production launced without Redis')
+    SlackHelper.log('Production launched without Redis')
   end
 
   # Comment to enable rate limiting in other environments:
-  if $redis && !Rails.env.test? && !Rails.env.development?
+  if redis_conn && !Rails.env.test? && !Rails.env.development?
     ### Configure Cache ###
 
-    Rack::Attack.cache.store = Rack::Attack::StoreProxy::RedisStoreProxy.new($redis)
+    # Use ActiveSupport::Cache::RedisCacheStore for Rails 7
+    Rack::Attack.cache.store = ActiveSupport::Cache::RedisCacheStore.new(redis: redis_conn)
 
     ### Throttle Spammy Clients ###
 

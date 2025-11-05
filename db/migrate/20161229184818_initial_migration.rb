@@ -1,4 +1,4 @@
-class InitialMigration < ActiveRecord::Migration[5.0]
+class InitialMigration < ActiveRecord::Migration[7.2]
   def change
     enable_extension "plpgsql"
     enable_extension "uuid-ossp"

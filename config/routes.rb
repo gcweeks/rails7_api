@@ -2,7 +2,10 @@ Rails.application.routes.draw do
   namespace :v1 do
     resources :users, only: [:create]
 
-    # Calls that do not requre an access token
+    # Health check endpoint
+    get  'health'                   => 'api#health'
+
+    # Calls that do not require an access token
     get  '/'                        => 'api#request_get'
     post '/'                        => 'api#request_post'
     get  'auth'                     => 'api#auth'
