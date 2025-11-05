@@ -1,5 +1,6 @@
 class Rack::Attack
   # Configure Redis connection for Rack::Attack
+  redis_conn = nil  # Initialize in outer scope to prevent NameError
   if ENV['REDIS_HOST'].present?
     redis_conn = Redis.new(host: ENV['REDIS_HOST'], port: 6379)
   elsif !Rails.env.production?
