@@ -13,7 +13,7 @@ gem 'puma', '>= 6.4'
 # Use Redis for caching and rate limiting
 gem 'redis', '>= 4.0', '< 6.0'
 # Use ActiveModel has_secure_password
-gem 'bcrypt', '~> 3.1.20'
+gem 'bcrypt', '~> 3.1.22'
 
 # Boot time performance
 gem 'bootsnap', require: false
